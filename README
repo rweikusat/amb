@@ -2,8 +2,37 @@ Some toy code I wrote to solve the problem defined at
 
 https://rosettacode.org/wiki/Amb
 
-It's basically given a list of lists of words and a predicate
-function, find a combination of one word from each list which
+It's basically: Given a list of lists of words and a predicate
+function, find a combination of one word from each word list which
 satisfies the predicate by doing an exhaustive search
 ('backtracking') of the set of all possible combinations.
+
+The specified predicate is that each word of the solution except the
+first must start with the letter the last one ended with.
+
+amb.pl is a Perl implementation of the first idea I had for this,
+namely, the operator takes a predication function and a list of
+words. The predicate function either returns a value or throws an
+exception. In case of the former, the returns value is the
+sought-after solution. Otherwise, the operator invokes itself
+recursively to try to next world. For the actual problem, ie, for more
+than one wordlist, the predicate function must do nested amb calls as
+needed.
+
+amb-2.pl is another Perl implementation. This time, the operator takes
+a list of word lists and a predicate function and implements a
+straight-forward recursive exhaustive search of all possible
+combinations.
+
+amb.c is C implementation of the same algorithm based on using
+null-pointer terminated arrays for the individual word lists, the
+result lists and the list of word lists. It shares the list of word
+lists among all recursive invocations (as opposed to amd-2.pl, which
+creates a copy of it at each level) but creates a copy of the
+"combination so far" at each level. This could principally be avoided
+by splitting amb in two, a preprocessing/ interface function which
+counts the number of word lists in the input and allocates a
+sufficiently large result array. But this would obscure the basic
+algorithm and certainly not be worth the effort for a code demo.
+
 
