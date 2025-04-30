@@ -83,21 +83,13 @@ static char **copy_s(char **sentence)
  */
 static char **amb(char ***words, int (*pred)(char **), char **sentence)
 {
-    char **mine, ***remain, **s_work, **res;
+    char **mine, **s_work, **res;
     unsigned n, n_mine;
 
     if (!*words) {
         if (pred(sentence)) return copy_s(sentence);
         return 0;
     }
-
-    /* split words into "my words" and "remaining words" */
-    n = 1;
-    while (words[n]) ++n;
-    remain = alloca(sizeof(*words) * n);
-    mine = *words;
-    n = 0;
-    do remain[n] = words[n + 1]; while (words[++n]);
 
     /* create "work sentence" as "all words of sentence" + "space for our word" + 0 marker */
     n = n_words(sentence);
@@ -112,9 +104,11 @@ static char **amb(char ***words, int (*pred)(char **), char **sentence)
     s_work[n + 1] = 0;
 
     /* search loop */
+    mine = *words;
+    ++words;
     n_mine = 0;
     while (s_work[n] = mine[n_mine], s_work[n]) {
-        res = amb(remain, pred, s_work);
+        res = amb(words, pred, s_work);
         if (res) return res;
 
         ++n_mine;
