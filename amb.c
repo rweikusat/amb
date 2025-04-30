@@ -31,7 +31,10 @@ static char **words[] = {
  */
 static int l_eq_f(char *w0, char *w1)
 {
-    return w0[strlen(w0) - 1] == *w1;
+    unsigned len;
+
+    len = strlen(w0);
+    return len ? w0[len - 1] == *w1 : !*w1;
 }
 
 static int chained(char **sentence)
