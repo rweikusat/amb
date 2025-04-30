@@ -1,0 +1,9 @@
+Some toy code I wrote to solve the problem defined at
+
+https://rosettacode.org/wiki/Amb
+
+It's basically given a list of lists of words and a predicate
+function, find a combination of one word from each list which
+satisfies the predicate by doing an exhaustive search
+('backtracking') of the set of all possible combinations.
+
