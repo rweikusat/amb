@@ -41,10 +41,10 @@ static int chained(char **sentence)
 {
     char *cur, *next;
 
-    cur = *sentence;
-    while (next = *++sentence) {
+    next = *sentence;
+    while (cur = next) {
+        next = *++sentence;
         if (!l_eq_f(cur, next)) return 0;
-        cur = next;
     }
 
     return 1;
