@@ -107,6 +107,7 @@ static char **amb(char ***words, int (*pred)(char **), char **sentence)
     mine = *words;
     ++words;
     n_mine = 0;
+
     while (s_work[n] = mine[n_mine], s_work[n]) {
         res = amb(words, pred, s_work);
         if (res) return res;
