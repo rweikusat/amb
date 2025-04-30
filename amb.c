@@ -1,10 +1,5 @@
 /*
-  recursvie implementation of https://rosettacode.org/wiki/Amb I wrote because
-  	- I didn't program anything for weeks
-        - to fill the slot for an additional file
-
-  I did this in Perl first but then redid it in C because
-  "it can't be so difficult."
+  recursive implementation of https://rosettacode.org/wiki/Amb
 */
 #include <alloca.h>
 #include <stdio.h>
@@ -26,7 +21,7 @@ static char **words[] = {
 
 /*
  * condition:
- * every word but the first start with the letter
+ * every word but the first starts with the letter
  * the word before it ended with
  */
 static int l_eq_f(char *w0, char *w1)
