@@ -49,17 +49,27 @@ static int chained(char **sentence)
 }
 
 /*
- * helper: copy a sentence to heap memory
+ * helpers
  */
+static unsigned n_words(char **sentence)
+{
+    unsigned n;
+
+    n = 0;
+    if (sentence)
+        while (sentence[n]) ++n;
+
+    return n;
+}
+
 static char **copy_s(char **sentence)
 {
     char **copy;
     unsigned n;
 
-    n = 0;
-    while (sentence[n]) ++n;
+    n = n_words(sentence);
     if (!n) return 0;
-
+    
     copy = malloc((n + 1) * sizeof(*sentence));
     n = 0;
     do copy[n] = sentence[n]; while (sentence[++n]);
@@ -90,14 +100,9 @@ static char **amb(char ***words, int (*pred)(char **), char **sentence)
     do remain[n] = words[n + 1]; while (words[++n]);
 
     /* create "work sentence" as "all words of sentence" + "space for our word" + 0 marker */
-    if (!sentence) {
-        s_work = alloca(2 * sizeof(*sentence));
-        n = 0;
-    } else {
-        n = 0;
-        while (sentence[n]) ++n;
-        s_work = alloca((n + 2) * sizeof(*sentence));
-
+    n = n_words(sentence);
+    s_work = alloca((n + 2) * sizeof(*sentence));
+    if (n) {
         n = 0;
         while (sentence[n]) {
             s_work[n] = sentence[n];
