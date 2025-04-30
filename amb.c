@@ -42,7 +42,7 @@ static int chained(char **sentence)
     char *cur, *next;
 
     next = *sentence;
-    while (cur = next) {
+    while (cur = next, cur) {
         next = *++sentence;
         if (!l_eq_f(cur, next)) return 0;
     }
@@ -110,7 +110,7 @@ static char **amb(char ***words, int (*pred)(char **), char **sentence)
 
     /* search loop */
     n_mine = 0;
-    while (s_work[n] = mine[n_mine]) {
+    while (s_work[n] = mine[n_mine], s_work[n]) {
         res = amb(remain, pred, s_work);
         if (res) return res;
 
