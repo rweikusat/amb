@@ -11,7 +11,7 @@ The specified predicate is that each word of the solution except the
 first must start with the letter the last one ended with.
 
 amb.pl is a Perl implementation of the first idea I had for this,
-namely, the operator takes a predication function and a list of
+namely, the operator takes a predicate function and a list of
 words. The predicate function either returns a value or throws an
 exception. In case of the former, the returned value is the
 sought-after solution. Otherwise, the operator invokes itself
