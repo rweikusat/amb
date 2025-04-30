@@ -42,10 +42,8 @@ static int chained(char **sentence)
     char *cur, *next;
 
     next = *sentence;
-    while (cur = next, cur) {
-        next = *++sentence;
+    while ((cur = next, cur) && (next = *++sentence, next))
         if (!l_eq_f(cur, next)) return 0;
-    }
 
     return 1;
 }
