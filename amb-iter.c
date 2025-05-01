@@ -51,6 +51,44 @@ static char **amb(char ***words, int (*pred)(char **))
     char **res, ***pos, **posl, *cur;
     unsigned level, depth;
 
+    /*
+      Basic idea behind this algorithm is to move down in the word
+      list set until there's a first possible solution and then, work
+      back up from there. The input set is partitioned into two sets:
+
+          - n intermediate lists, n >= 0
+          - the final list
+
+      Each intermediate list has a current position in the array
+      pos. The variable level is the start level for the current
+      iteration, initially 0.
+
+      The first inner loop moves from start level to the last
+      intermediate level, initializing the pos of the current level to
+      the start of the corresponding word list and the result slot for
+      the current depth to the first word from that.
+
+      The second inner loop works through the final word list: It sets
+      the last result slot to each word on that in turn and invokes
+      the predicate function to determine if the prospective result is
+      good. If so, the function returns it.
+
+      The third inner loop moves back up through the intermediate lists
+      in order to find one whose supply of words hasn't yet been
+      exhausted. If it finds a word, it puts it into the result slot
+      for the current depth and terminates. Afterwards, level is
+      increased and the whole process starts over (with the first
+      inner loop) from this position.
+
+      The outer loop terminates if cur doesn't point to a word after
+      all the inner processing took place. This can either happen
+      because only one list was provided and the second inner loop
+      worked throught it without finding a solution. Or because the
+      third inner loop determined that the search space has been
+      exhausted, because it couldn't find a word to continue with at
+      any intermediate level.
+    */
+
     depth = 0;
     while (words[depth]) ++depth;
     if (!depth) return 0;
