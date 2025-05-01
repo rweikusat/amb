@@ -54,41 +54,17 @@ static char **amb(char ***words, int (*pred)(char **))
     /*
       Basic idea behind this algorithm is to move down in the word
       list set until there's a first possible solution and then, work
-      back up from there. The input set is partitioned into two sets:
+      rightward and back up from there. The input set is partitioned into two sets:
 
           - n intermediate lists, n >= 0
           - the final list
 
-      Each intermediate list has a current position in the array
-      pos. The variable level is the start level for the current
-      iteration, initially 0. A variable named cur points to the
-      current word.
+      Variables:
 
-      The first inner loop moves from start level to the last
-      intermediate level, initializing the pos of the current level to
-      the start of the corresponding word list and the result slot for
-      the current depth to the first word from that.
-
-      The second inner loop works through the final word list: It sets
-      the last result slot to each word on that in turn and invokes
-      the predicate function to determine if the prospective result is
-      good. If so, the function returns it.
-
-      The third inner loop moves back up through the intermediate lists
-      in order to find one whose supply of words hasn't yet been
-      exhausted. It decreases the level, increases the pos for the
-      new level and looks for a word there. If one is found, it's
-      put into the res slot for the current level and the loop
-      terminates. Otherwise, it continues if the top level hadn't been
-      reached yet.
-
-      The outer loop terminates if cur doesn't point to a word after
-      all the inner processing took place. This can either happen
-      because only one list was provided and the second inner loop
-      worked throught it without finding a solution. Or because the
-      third inner loop determined that the search space has been
-      exhausted, because it couldn't find a word to continue with at
-      any intermediate level.
+          depth: number of intermediate lists (while inside outmost loop)
+          level: current vertical position in the input set
+          pos:   array of horizontal positions for the intermediate lists
+          res:   array storing the current prospective solution
     */
 
     depth = 0;
