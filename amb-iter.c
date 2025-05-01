@@ -52,18 +52,25 @@ static char **amb(char ***words, int (*pred)(char **))
     unsigned level, depth;
 
     /*
+      In the following, a depth/ level refers to the distance of the
+      current position in the words array from the start of it. Level 0
+      is on top, followed by level 1 immediately below it and so
+      forth.
+      
       Basic idea behind this algorithm is to move down in the word
       list set until there's a first possible solution and then, work
-      rightward and back up from there. The input set is partitioned into two sets:
+      rightward and back up from there. The input set is partitioned
+      into two sets:
 
           - n intermediate lists, n >= 0
           - the final list
 
       Variables:
 
+          cur:   either the last word assign to a res slot or null pointer
           depth: number of intermediate lists (while inside outmost loop)
           level: current vertical position in the input set
-          pos:   array of horizontal positions for the intermediate lists
+          pos:   array of horizontal positions (as char **) for the intermediate lists
           res:   array storing the current prospective solution
     */
 
@@ -78,6 +85,19 @@ static char **amb(char ***words, int (*pred)(char **))
     --depth;
 
     do {
+        /*
+          At this point, there's a conceptual ceiling (at level - 1)
+          which is the depth of the result slot which was changed
+          last. All result slots from 0 to the current ceiling are
+          supposed to retain their present values and all position
+          from 0 to the current ceiling to remain as they are. The
+          loop resets all positions below the ceiling and above the
+          final list to the start and all corresponding result slots
+          to the first words of the respective lists.
+
+          For the first iteration of the outer loop, the ceiling is
+          virtual and assumed to exist at depth -1.
+        */
         while (level < depth) {
             pos[level] = words[level];
             res[level] = *pos[level];
@@ -85,6 +105,12 @@ static char **amb(char ***words, int (*pred)(char **))
             ++level;
         }
 
+        /*
+          Process final list. Set the final result slot to each word
+          in turn and check if the current prospective result is a
+          solution. If so, return it, otherwise continue with next
+          word or exit the loop if there isn't any.
+        */
         posl = words[level];
         while (cur = *posl, cur) {
             res[level] = cur;
@@ -93,6 +119,13 @@ static char **amb(char ***words, int (*pred)(char **))
             ++posl;
         }
 
+        /*
+          Move back up until a list whose supply of words hasn't yet
+          been exhausted is found or level 0 has been checked in
+          vain. If such a list was found, the result slot for the
+          current level is set to the next word on it and the loop
+          terminates.
+        */
         while (level) {
             --level;
 
@@ -103,8 +136,13 @@ static char **amb(char ***words, int (*pred)(char **))
             }
         }
 
-        ++level;
-    } while (cur);
+        /*
+          Current level is the ceiling for the next
+          iteration. Increase level so that the first inner loop
+          starts working below it.
+        */
+        ++level;                
+    } while (cur);              /* no more words -> terminate */
 
     free(res);
     return 0;
