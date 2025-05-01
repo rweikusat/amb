@@ -85,19 +85,6 @@ static char **amb(char ***words, int (*pred)(char **))
     --depth;
 
     do {
-        /*
-          At this point, there's a conceptual ceiling (at level - 1)
-          which is the depth of the result slot which was changed
-          last. All result slots from 0 to the current ceiling are
-          supposed to retain their present values and all position
-          from 0 to the current ceiling to remain as they are. The
-          loop resets all positions below the ceiling and above the
-          final list to the start and all corresponding result slots
-          to the first words of the respective lists.
-
-          For the first iteration of the outer loop, the ceiling is
-          virtual and assumed to exist at depth -1.
-        */
         while (level < depth) {
             pos[level] = words[level];
             res[level] = *pos[level];
@@ -105,12 +92,6 @@ static char **amb(char ***words, int (*pred)(char **))
             ++level;
         }
 
-        /*
-          Process final list. Set the final result slot to each word
-          in turn and check if the current prospective result is a
-          solution. If so, return it, otherwise continue with next
-          word or exit the loop if there isn't any.
-        */
         posl = words[level];
         while (cur = *posl, cur) {
             res[level] = cur;
@@ -119,13 +100,6 @@ static char **amb(char ***words, int (*pred)(char **))
             ++posl;
         }
 
-        /*
-          Move back up until a list whose supply of words hasn't yet
-          been exhausted is found or level 0 has been checked in
-          vain. If such a list was found, the result slot for the
-          current level is set to the next word on it and the loop
-          terminates.
-        */
         while (level) {
             --level;
 
@@ -136,13 +110,8 @@ static char **amb(char ***words, int (*pred)(char **))
             }
         }
 
-        /*
-          Current level is the ceiling for the next
-          iteration. Increase level so that the first inner loop
-          starts working below it.
-        */
         ++level;                
-    } while (cur);              /* no more words -> terminate */
+    } while (cur);
 
     free(res);
     return 0;
