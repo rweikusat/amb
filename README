@@ -29,8 +29,8 @@ null-pointer terminated arrays for the individual word lists, the
 result list and the list of word lists. It shares the list of word
 lists among all recursive invocations (as opposed to amd-2.pl, which
 creates a copy of it at each level) but creates a copy of the
-"combination so far" at each level. This could principally be avoided
-by splitting amb in two, a preprocessing/ interface function which
-counts the number of word lists in the input and allocates a
-sufficiently large result array. But this would obscure the basic
-algorithm and certainly not be worth the effort for a code demo.
+"combination so far" at each level.
+
+amb-iter.c is an iterative implementation in C which does no redundant
+copying. That's the most complicated algorithm, however, it's real
+beauty in motion.
