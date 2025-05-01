@@ -32,5 +32,5 @@ creates a copy of it at each level) but creates a copy of the
 "combination so far" at each level.
 
 amb-iter.c is an iterative implementation in C which does no redundant
-copying. The most complicated algorithm, but real beauty in motion.
-
+copying. The most complicated algorithm. Documenting it is a work in
+progress.
