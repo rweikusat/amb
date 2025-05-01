@@ -61,7 +61,8 @@ static char **amb(char ***words, int (*pred)(char **))
 
       Each intermediate list has a current position in the array
       pos. The variable level is the start level for the current
-      iteration, initially 0.
+      iteration, initially 0. A variable named cur points to the
+      current word.
 
       The first inner loop moves from start level to the last
       intermediate level, initializing the pos of the current level to
@@ -75,10 +76,11 @@ static char **amb(char ***words, int (*pred)(char **))
 
       The third inner loop moves back up through the intermediate lists
       in order to find one whose supply of words hasn't yet been
-      exhausted. If it finds a word, it puts it into the result slot
-      for the current depth and terminates. Afterwards, level is
-      increased and the whole process starts over (with the first
-      inner loop) from this position.
+      exhausted. It decreases the level, increases the pos for the
+      new level and looks for a word there. If one is found, it's
+      put into the res slot for the current level and the loop
+      terminates. Otherwise, it continues if the top level hadn't been
+      reached yet.
 
       The outer loop terminates if cur doesn't point to a word after
       all the inner processing took place. This can either happen
