@@ -89,7 +89,8 @@ static char **amb(char ***words, int (*pred)(char **))
 
         ++level;
     } while (cur);
-    
+
+    free(res);
     return 0;
 }
 
