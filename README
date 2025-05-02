@@ -31,6 +31,10 @@ lists among all recursive invocations (as opposed to amd-2.pl, which
 creates a copy of it at each level) but creates a copy of the
 "combination so far" at each level.
 
-amb-iter.c is an iterative implementation in C which does no redundant
-copying. The most complicated algorithm. Documenting it is a work in
-progress.
+amb-iter.c is an iterative implementation in C. It's a standard
+transliteration of a recursive into an iterative algorithm using an
+explicit stack for the per-wordlist positions instead of storing these
+implicity on the callstack. An inner loop deals with the special-case
+of the final list. Two more inner loops implement the yoyo-style down
+- up - down movements on this stack which lead to an exhaustive search
+of the space of possible solutions.
