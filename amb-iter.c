@@ -48,14 +48,14 @@ static int chained(char **sentence)
  */
 static char **amb(char ***words, int (*pred)(char **))
 {
-    char **res, ***pos, **posl, *cur;
+    char **res, ***posn, **pos, *cur;
     unsigned level, depth;
 
     depth = 0;
     while (words[depth]) ++depth;
     if (!depth) return 0;
 
-    pos = alloca((depth - 1) * sizeof(*pos));
+    posn = alloca((depth - 1) * sizeof(*posn));
     res = malloc((depth + 1) * sizeof(*res));
     res[depth] = 0;
     level = 0;
@@ -63,24 +63,24 @@ static char **amb(char ***words, int (*pred)(char **))
 
     do {
         while (level < depth) {
-            pos[level] = words[level];
-            res[level] = *pos[level];
+            posn[level] = words[level];
+            res[level] = *posn[level];
 
             ++level;
         }
 
-        posl = words[level];
-        while (cur = *posl, cur) {
+        pos = words[level];
+        while (cur = *pos, cur) {
             res[level] = cur;
             if (pred(res)) return res;
 
-            ++posl;
+            ++pos;
         }
 
         while (level) {
             --level;
 
-            cur = *++pos[level];
+            cur = *++posn[level];
             if (cur) {
                 res[level] = cur;
                 break;
